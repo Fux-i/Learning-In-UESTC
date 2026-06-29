@@ -53,7 +53,7 @@ void print_hash_table(hashnode *ht[]) {
 
 int main() {
     hashnode *ht[P] = {NULL};
-    int keys[] = {10, 15, 20, 25, 30, 35, 40};
+    int keys[] = {7, 14, 1, 9, 16, 10, 11};
     int n = 7;
 
     printf("输入序列：");
@@ -61,18 +61,18 @@ int main() {
         printf("%d ", keys[i]);
     }
     printf("\n\n");
-
+    
     hashing(ht, keys, n);
 
     printf("哈希表内容：\n");
     print_hash_table(ht);
     // 预期输出（头插法，顺序相反）：
-    // [0]: 35 -> NULL
-    // [1]: 15 -> NULL
-    // [2]: 30 -> NULL
-    // [3]: 25 -> NULL
-    // [4]: 40 -> 10 -> NULL
-    // [5]: 20 -> NULL
+    // [0]: 14 -> 7 -> NULL
+    // [1]: 1 -> NULL
+    // [2]: 16 -> 9 -> NULL
+    // [3]: 10 -> NULL
+    // [4]: 11 -> NULL
+    // [5]: NULL
     // [6]: NULL
 
     return 0;
