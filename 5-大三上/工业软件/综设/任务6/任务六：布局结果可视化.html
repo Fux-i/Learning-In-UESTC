@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>布局结果可视化</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #3498db;
+        }
+        .section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .task {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #fffacd;
+            padding: 10px;
+            border-left: 4px solid #ffeb3b;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>布局结果可视化</h1>
+    
+    <div class="section">
+        <h2>1. 核心知识点总结</h2>
+        
+        <h3>1.1 坐标系系统</h3>
+        <p>在布局可视化中，存在两种不同的坐标系系统：</p>
+        
+        <table>
+            <tr>
+                <th>坐标系类型</th>
+                <th>原点位置</th>
+                <th>Y轴方向</th>
+                <th>应用场景</th>
+            </tr>
+            <tr>
+                <td>数学坐标系（笛卡尔坐标系）</td>
+                <td>左下角 (0,0)</td>
+                <td>向上为正方向</td>
+                <td>数学、物理、工程计算</td>
+            </tr>
+            <tr>
+                <td>屏幕坐标系（像素坐标系）</td>
+                <td>左上角 (0,0)</td>
+                <td>向下为正方向</td>
+                <td>图形API（Cairo、OpenGL、Skia、HTML Canvas、Qt、PDF等）</td>
+            </tr>
+        </table>
+        
+        <div class="note">
+            <p><strong>重要说明：</strong>布局数据通常使用数学坐标系存储，但在屏幕显示时需要转换为屏幕坐标系，这需要反转Y轴。</p>
+        </div>
+        
+        <h3>1.2 布局坐标系统</h3>
+        <p>在布局系统中，使用数学坐标系定义各种对象的坐标：</p>
+        <ul>
+            <li><span class="highlight">布线行 (SiteRow)</span>：由*.scl文件定义，是布局的基本单元</li>
+            <li><span class="highlight">布局区域 (CoreRegion)</span>：所有SiteRow的最小外包矩形
+                <ul>
+                    <li>CoreRegion.ll：矩形左下角坐标(x,y)</li>
+                    <li>CoreRegion.ur：矩形右上角坐标(x,y)</li>
+                </ul>
+            </li>
+            <li><span class="highlight">芯片区域 (ChipRegion)</span>：包含CoreRegion和所有终端的最小外包矩形，是绘图时显示的主要区域</li>
+            <li><span class="highlight">节点 (Node)</span>：布局中的基本单元
+                <ul>
+                    <li>Node.ll：节点矩形左下角坐标(x,y)</li>
+                    <li>Node.ur：节点矩形右上角坐标(x,y)</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h3>1.3 可视化工具与实现</h3>
+        <p><span class="highlight">CImg库</span>是一个轻量级的C++图像处理库，具有以下特点：</p>
+        <ul>
+            <li>仅由一个头文件CImg.h组成，无需复杂安装</li>
+            <li>不依赖OpenCV、ImageMagick等大型库</li>
+            <li>支持图像加载/保存、滤波、几何变换、绘图、颜色空间转换、3D可视化等功能</li>
+            <li>非常适合快速开发布局可视化工具</li>
+        </ul>
+        
+        <h3>1.4 坐标转换原理</h3>
+        <p>将布局数据可视化需要经过两个关键转换步骤：</p>
+        <ol>
+            <li><strong>相对坐标转换</strong>：将节点坐标转换为相对于芯片区域的坐标</li>
+            <li><strong>屏幕坐标转换</strong>：将相对坐标转换为屏幕坐标，包括Y轴翻转</li>
+        </ol>
+        
+        <p>转换公式如下：</p>
+        <div class="code-block">
+            // X坐标转换<br>
+            int x1 = (curNode->getLL_2D().x - db->chipRegion.ll.x) * unitX + xMargin;<br>
+            int x2 = (curNode->getUR_2D().x - db->chipRegion.ll.x) * unitX + xMargin;<br>
+            <br>
+            // Y坐标转换（注意Y轴翻转）<br>
+            int y1 = (chipRegionHeight - (curNode->getLL_2D().y - db->chipRegion.ll.y)) * unitY + yMargin;<br>
+            int y2 = (chipRegionHeight - (curNode->getUR_2D().y - db->chipRegion.ll.y)) * unitY + yMargin;
+        </div>
+    </div>
+    
+    <div class="task">
+        <h2>实验六：结果分析与可视化（2周）</h2>
+        
+        <h3>实验目标</h3>
+        <ol>
+            <li>实现布局结果评估指标计算（线长、密度等）</li>
+            <li>开发简单的布局可视化工具</li>
+            <li>输出符合BookShelf格式的布局结果</li>
+        </ol>
+        
+        <h3>实验要求</h3>
+        <ul>
+            <li>深入理解布局数据结构和坐标系统</li>
+            <li>掌握坐标转换原理和方法</li>
+            <li>能够使用CImg或其他图形库实现布局可视化</li>
+            <li>理解并实现BookShelf格式的布局输出</li>
+        </ul>
+        
+        <h3>实践步骤和方法</h3>
+        
+        <h4>阶段一：布局结果评估指标计算（第1周）</h4>
+        <ol>
+            <li><strong>线长计算</strong>
+                <ul>
+                    <li>实现半周长线长(HPWL)计算算法</li>
+                    <li>考虑多引脚网络的线长计算</li>
+                    <li>计算总线和平均线长</li>
+                </ul>
+            </li>
+            <li><strong>密度分析</strong>
+                <ul>
+                    <li>实现局部区域密度计算</li>
+                    <li>分析密度分布和热点区域</li>
+                    <li>计算全局密度指标</li>
+                </ul>
+            </li>
+            <li><strong>其他评估指标</strong>
+                <ul>
+                    <li>重叠度分析</li>
+                    <li>布局利用率计算</li>
+                    <li>时序关键路径分析</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h4>阶段二：布局可视化工具开发（第2周）</h4>
+        <ol>
+            <li><strong>环境配置与数据准备</strong>
+                <ul>
+                    <li>配置CImg库或其他图形库开发环境</li>
+                    <li>准备测试布局数据</li>
+                    <li>解析布局文件格式</li>
+                </ul>
+            </li>
+            <li><strong>坐标系转换实现</strong>
+                <ul>
+                    <li>实现数学坐标系到屏幕坐标系的转换</li>
+                    <li>处理Y轴翻转问题</li>
+                    <li>实现缩放和平移功能</li>
+                </ul>
+                <div class="code-block">
+                    // 示例代码：坐标转换函数<br>
+                    void convertToScreenCoords(const Node& node, const ChipRegion& chipRegion, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float unitX, float unitY, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int xMargin, int yMargin, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int& screenX1, int& screenY1, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int& screenX2, int& screenY2) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// 计算芯片区域高度<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;float chipRegionHeight = chipRegion.ur.y - chipRegion.ll.y;<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// X坐标转换<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;screenX1 = (node.ll.x - chipRegion.ll.x) * unitX + xMargin;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;screenX2 = (node.ur.x - chipRegion.ll.x) * unitX + xMargin;<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// Y坐标转换（注意Y轴翻转）<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;screenY1 = (chipRegionHeight - (node.ll.y - chipRegion.ll.y)) * unitY + yMargin;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;screenY2 = (chipRegionHeight - (node.ur.y - chipRegion.ll.y)) * unitY + yMargin;<br>
+                    }
+                </div>
+            </li>
+            <li><strong>布局元素绘制</strong>
+                <ul>
+                    <li>绘制芯片区域边界</li>
+                    <li>绘制布局区域</li>
+                    <li>绘制布线行(SiteRow)</li>
+                    <li>绘制节点(Node)及其连接关系</li>
+                </ul>
+                <div class="code-block">
+                    // 示例代码：使用CImg绘制节点<br>
+                    void drawNode(CImg<unsigned char>& img, const Node& node, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const ChipRegion& chipRegion, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float unitX, float unitY, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int xMargin, int yMargin, <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const unsigned char color[3]) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;int x1, y1, x2, y2;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;convertToScreenCoords(node, chipRegion, unitX, unitY, xMargin, yMargin, x1, y1, x2, y2);<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// 绘制节点矩形<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;img.draw_rectangle(x1, y1, x2, y2, color, 1.0f);<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// 可选：填充节点内部<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;unsigned char fillColor[3] = {color[0]/2, color[1]/2, color[2]/2};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;img.draw_rectangle(x1+1, y1+1, x2-1, y2-1, fillColor, 0.8f);<br>
+                    }
+                </div>
+            </li>
+            <li><strong>可视化增强</strong>
+                <ul>
+                    <li>添加颜色编码表示不同属性（如密度、时序关键度）</li>
+                    <li>实现缩放和平移交互功能</li>
+                    <li>添加图例和标注</li>
+                    <li>支持多图层显示</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h4>阶段三：BookShelf格式输出（第2周后半）</h4>
+        <ol>
+            <li><strong>BookShelf格式研究</strong>
+                <ul>
+                    <li>分析.aux, .nodes, .nets, .pl, .scl等文件格式</li>
+                    <li>理解各字段含义和数据组织方式</li>
+                </ul>
+            </li>
+            <li><strong>布局结果输出</strong>
+                <ul>
+                    <li>实现.pl文件（布局位置文件）输出</li>
+                    <li>确保输出格式符合BookShelf标准</li>
+                    <li>验证输出文件的正确性和兼容性</li>
+                </ul>
+                <div class="code-block">
+                    // 示例代码：输出BookShelf格式的.pl文件<br>
+                    void writeBookShelfPL(const string& filename, const vector<Node>& nodes) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;ofstream plFile(filename);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if (!plFile.is_open()) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cerr << "无法打开文件: " << filename << endl;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// 写入文件头<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;plFile << "UCLA pl 1.0" << endl;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;plFile << "# Created by Placement Visualization Tool" << endl;<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// 写入每个节点的位置信息<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;for (const auto& node : nodes) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plFile << node.name << " " <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<< node.ll.x << " " <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<< node.ll.y << " : " <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<< (node.isFixed ? "FIXED" : "PLACED") <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<< endl;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;plFile.close();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << "BookShelf .pl文件已生成: " << filename << endl;<br>
+                    }
+                </div>
+            </li>
+        </ol>
+        
+        <h3>实验提交要求</h3>
+        <ul>
+            <li>完整的源代码（包含注释）</li>
+            <li>实验报告（包含设计思路、实现方法、结果分析）</li>
+            <li>测试数据和可视化结果截图</li>
+            <li>生成的BookShelf格式布局文件</li>
+        </ul>
+        
+        <h3>扩展思考</h3>
+        <ul>
+            <li>如何优化可视化性能以支持大规模布局？</li>
+            <li>如何实现交互式布局编辑功能？</li>
+            <li>如何将布局可视化与布局算法集成？</li>
+            <li>如何支持多种布局文件格式的输入输出？</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>2. 总结</h2>
+        <p>本教学材料详细介绍了布局结果可视化的核心概念，包括坐标系系统、布局数据结构、坐标转换原理以及可视化实现方法。通过实验六的动手实践，学生将能够：</p>
+        <ol>
+            <li>深入理解布局数据的组织方式和坐标系统</li>
+            <li>掌握布局评估指标的计算方法</li>
+            <li>实现布局数据的可视化展示</li>
+            <li>生成符合工业标准的BookShelf格式布局结果</li>
+        </ol>
+    </div>
+</body>
+</html>
