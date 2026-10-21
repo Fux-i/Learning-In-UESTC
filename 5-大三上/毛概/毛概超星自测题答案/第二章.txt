@@ -1,4 +1,4 @@
-一. 单选题（9 questions）
+一. 单选题（10 questions）
 1
 【Single Choice】毛泽东在《〈共产党人〉发刊词》一文中,总结了中国革命两次胜利和两次失败的经验教训,揭示了中国革命发展的客观规律,归纳了党在中国革命中战胜敌人的三个主要的法宝是( )
 A、
@@ -125,8 +125,22 @@ D、
 
 Right answer：D
 
-二. 多选题（6 questions）
 10
+【Single Choice】中国革命的基本问题是( )
+A、
+农民问题
+B、
+工人问题
+C、
+政权问题
+D、
+土地问题
+
+
+Right answer：A
+
+二. 多选题（7 questions）
+11
 【Multiple Choice】新民主主义革命属于 ( )
 A、
 资产阶级民主革命
@@ -140,7 +154,7 @@ D、
 
 Right answer：AD
 
-11
+12
 【Multiple Choice】新民主主义革命的动力包括 ( )
 A、
 民族资产阶级
@@ -154,7 +168,7 @@ D、
 
 Right answer：ABCD
 
-12
+13
 【Multiple Choice】新民主主义革命的对象是( )
 A、
 民族资产阶级
@@ -168,7 +182,7 @@ D、
 
 Right answer：BCD
 
-13
+14
 【Multiple Choice】近代中国社会的阶级结构是“两头小中间大”,那么“两头”是指( )
 A、
 城市小资产阶级
@@ -182,7 +196,7 @@ D、
 
 Right answer：BC
 
-14
+15
 【Multiple Choice】毛泽东指出,无产阶级要实现对同盟者的领导必须具备的条件有 ( )
 A、
 对被领导者给以物质福利,至少不损害其利益,同时对被领导者给予政治教育
@@ -196,7 +210,7 @@ D、
 
 Right answer：AD
 
-15
+16
 【Multiple Choice】关于近代中国半殖民地半封建社会的主要矛盾,下列说法正确的是 ( )
 A、
 帝国主义和中华民族的矛盾又是各种矛盾中最主要的矛盾
@@ -209,3 +223,17 @@ D、
 
 
 Right answer：ACD
+
+17
+【Multiple Choice】1948年,毛泽东在《在晋绥干部会议上的讲话中》完整地表述了新民主主义革命总路线的内容,即( )
+A、
+无产阶级领导的
+B、
+人民大众的
+C、
+反对帝国主义、封建主义和官僚资本主义的革命
+D、
+反对民族资产阶级的革命
+
+
+Right answer：ABC
