@@ -85,7 +85,7 @@ E、
 
 Right answer：BCDE
 
-二. 单选题（9 questions）
+二. 单选题（10 questions）
 7
 【Single Choice】社会主义的根本任务是( )。
 A、
@@ -211,3 +211,17 @@ D、
 
 
 Right answer：A
+
+16
+【Single Choice】初级阶段党的基本路线最主要的内容是( )。
+A、
+领导和团结全国各族人民
+B、
+自力更生艰苦创业
+C、
+建设现代化国家
+D、
+一个中心两个基本点
+
+
+Right answer：D
