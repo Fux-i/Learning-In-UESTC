@@ -1,4 +1,4 @@
-一. 多选题（5 questions）
+一. 多选题（6 questions）
 1
 【Multiple Choice】科学发展观最鲜明的精神实质是( )
 A、
@@ -69,8 +69,22 @@ D、
 
 Right answer：ACD
 
-二. 单选题（10 questions）
 6
+【Multiple Choice】科学发展观强调,建设生态文明,要坚持节约资源和保护环境的基本国策,坚持( )的方针。
+A、
+自然恢复为主
+B、
+保护优先
+C、
+节约优先
+D、
+发展优先
+
+
+Right answer：ABC
+
+二. 单选题（10 questions）
+8
 【Single Choice】科学发展观,基本要求是( )
 A、
 统筹兼顾
@@ -84,7 +98,7 @@ D、
 
 Right answer：B
 
-7
+9
 【Single Choice】科学发展观强调,( )是党执政后的一项根本建设
 A、
 党要管党
@@ -98,7 +112,7 @@ D、
 
 Right answer：B
 
-8
+10
 【Single Choice】科学发展观,根本方法是( )
 A、
 统筹兼顾
@@ -112,7 +126,7 @@ D、
 
 Right answer：A
 
-9
+11
 【Single Choice】以党的( )为标志,科学发展观进一步走向成熟。
 A、
 十六届三中全
@@ -126,7 +140,7 @@ D、
 
 Right answer：D
 
-10
+12
 【Single Choice】( )是我国社会主义文化的引领和主导。
 A、
 党的领导
@@ -140,7 +154,7 @@ D、
 
 Right answer：D
 
-11
+13
 【Single Choice】科学发展观,核心立场是( )
 A、
 全面协调可持续
@@ -154,7 +168,7 @@ D、
 
 Right answer：C
 
-12
+14
 【Single Choice】科学发展观强调, ( )实质上就是要建设以资源环境承载力为基础、以自然规律为准则、以可持续发展为目标的资源节约型、环境友好型社会。
 A、
 建设生态文明
@@ -168,7 +182,7 @@ D、
 
 Right answer：A
 
-13
+15
 【Single Choice】党的文件中第一次提出科学发展观是在( )
 A、
 2004年3月,胡锦涛在中央人口资源环境座谈会上发表重要讲话
@@ -182,7 +196,7 @@ D、
 
 Right answer：C
 
-14
+16
 【Single Choice】科学发展观强调,社会主义民主政治的本质和核心是( )。
 A、
 无产阶级专政
@@ -196,7 +210,7 @@ D、
 
 Right answer：D
 
-15
+17
 【Single Choice】( )是科学发展观的第一要义。
 A、
 全面协调可持续
