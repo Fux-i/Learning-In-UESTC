@@ -6,8 +6,7 @@
     <li><a href="#00">00 前言</a></li>
     <li><a href="#01">01 声明</a></li>
     <li><a href="#02">02 使用方法</a></li>
-    <li><a href="#03">03 Github 的一些基础操作</a></li>
-    <li><a href="#04">04 其他</a></li>
+    <li><a href="#03">03 其他</a></li>
   </ul>
 </details>
 
@@ -46,50 +45,10 @@
 - 如何**下载**本仓库的文件？
   - 对于所有文件请查看下面 ↓ 的`7.`到`10.`
   - 只下载单个文件，可以先在网页中打开它，然后右上角下载
-  - 只想下载某一文件夹下的全部内容，先复制该文件夹网址，然后跳转到 [GitZip (kinolien.github.io)](https://kinolien.github.io/gitzip/) 输入并下载
+  - 只想下载某一文件夹下的全部内容，先复制该文件夹网址，然后跳转到 [downgit](https://downgit.github.io/) 输入并下载
 
-- 如何查看**更新**？
-  - **[点我](https://github.com/fux-i/Learning-In-UESTC/commits/main/)** 然后点击如图按钮显示详情 ![查看更新](./img/08.png)
-  - 更具体的请查看下面 ↓ 的`11.`-`13.`
+<h2 align="center" style="color:lightgreen"  id="03">03 其他</h2>
 
-<h2 align="center" style="color:lightgreen" id="03">03 Github 的一些基础操作</h2>
-
-（面向小白，需要自带魔法，想要了解更多，建议上手实操或看相关文章、视频）![图片 1](img/01.png)
-
-1.`Code`：本仓库包含的内容  
-2.`Issue`：遇到的问题，可在此处向作者提问  
-3.`Pull request`：推送申请，若您也想向该仓库上传资料，可以在此处申请上传（可以简单理解为`Push request`）
-
-![图片 2](img/02.png)
-
-4.`Watch`：选择通知方式，若有更新，会在您 Github 主页展示  
-5.`Fork`：在你的账号下复制一份该项目  
-6.`Star`：相当于收藏，点亮之后可以在个人主页的`Your stars`中看到该项目
-
-![图片 3](img/03.png)
-
-7.`Code`：下载代码（文件）  
-8.`Download ZIP`：将本仓库所有内容打包成`zip`文件下载  
-9.`Open with GitHub Desktop`：通过`Github Desktop`将代码（文件）复制到本地（推荐，便于后续更新）
-
-![图片 4](img/04.png)
-
-10. 选择好下载路径，点击`Clone`即可
-
-![图片 5](img/05.png)
-
-11.`Fetch origin`：检查仓库是否有更新，若有，会像下图显示
-
-![图片 6](img/06.png)
-
-12.`Pull origin`：拉取更新，将更新内容同步到本地仓库
-
-![图片 7](img/07.png)
-
-13.`History`：查看更新，如图
-
-<h2 align="center" style="color:lightgreen"  id="04">04 其他</h2>
-
-如有疑问（任何方面）可在 [**Issues**](https://github.com/fux-i/Learning-In-UESTC/issues) 中提出或通过 QQ 联系我：1538130391（当然，只是加个好友也欢迎哟）
+如有疑问可在 [**Issues**](https://github.com/fux-i/Learning-In-UESTC/issues) 中提出或通过 QQ 联系我：1538130391（当然，只是加个好友也欢迎哟）
 
 一些资料来自网络或学长学姐，若您为其一作者，且并不希望其公开，可与我联系。
